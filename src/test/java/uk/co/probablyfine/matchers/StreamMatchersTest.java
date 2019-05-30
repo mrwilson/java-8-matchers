@@ -4,9 +4,16 @@ import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
-import java.util.stream.*;
+import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
+import java.util.stream.LongStream;
+import java.util.stream.Stream;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.lessThanOrEqualTo;
+import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
 
 public class StreamMatchersTest {
@@ -203,7 +210,7 @@ public class StreamMatchersTest {
 
     @Test
     public void equalTo_failureMessages() throws Exception {
-        Matcher<BaseStream<String, Stream<String>>> matcher = StreamMatchers.equalTo(Stream.of("a", "b", "c", "d", "e", "f", "g", "h"));
+        Matcher<Stream<String>> matcher = StreamMatchers.equalTo(Stream.of("a", "b", "c", "d", "e", "f", "g", "h"));
         Stream<String> testData = Stream.of("a", "b", "c", "d", "e");
         Helper.testFailingMatcher(testData, matcher, "Stream of [\"a\",\"b\",\"c\",\"d\",\"e\",\"f\",\"g\",\"h\"]", "Stream of [\"a\",\"b\",\"c\",\"d\",\"e\"]");
     }
@@ -219,7 +226,7 @@ public class StreamMatchersTest {
     @Test
     public void equalToIntStream_failureMessages() throws Exception {
         IntStream testData = IntStream.range(8, 10);
-        Matcher<BaseStream<Integer, IntStream>> matcher = StreamMatchers.equalTo(IntStream.range(0, 6));
+        Matcher<IntStream> matcher = StreamMatchers.equalTo(IntStream.range(0, 6));
         Helper.testFailingMatcher(testData, matcher, "Stream of [<0>,<1>,<2>,<3>,<4>,<5>]", "Stream of [<8>,<9>]");
     }
 

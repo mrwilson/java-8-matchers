@@ -3,7 +3,9 @@ package uk.co.probablyfine.matchers;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.junit.Test;
+import uk.co.probablyfine.matchers.function.DescribableFunction;
 
+import java.util.stream.BaseStream;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
@@ -15,6 +17,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
+import static uk.co.probablyfine.matchers.Java8Matchers.where;
 
 public class StreamMatchersTest {
     @Test
@@ -213,6 +216,18 @@ public class StreamMatchersTest {
         Matcher<Stream<String>> matcher = StreamMatchers.equalTo(Stream.of("a", "b", "c", "d", "e", "f", "g", "h"));
         Stream<String> testData = Stream.of("a", "b", "c", "d", "e");
         Helper.testFailingMatcher(testData, matcher, "Stream of [\"a\",\"b\",\"c\",\"d\",\"e\",\"f\",\"g\",\"h\"]", "Stream of [\"a\",\"b\",\"c\",\"d\",\"e\"]");
+    }
+
+    @Test
+    public void equalTo_handles_types() {
+        Stream<Character> expectedStream = Stream.of('x', 'y', 'z');
+        assertThat("xyz", where(s -> s.chars().mapToObj(i -> (char) i), StreamMatchers.equalTo(expectedStream)));
+
+        BaseStream<Character, Stream<Character>> expectedBaseStream = Stream.of('x', 'y', 'z');
+        assertThat("xyz", where(s -> s.chars().mapToObj(i -> (char) i), StreamMatchers.equalTo(expectedBaseStream)));
+
+        DescribableFunction<String, BaseStream<Character, Stream<Character>>> characters = s -> s.chars().mapToObj(i -> (char) i);
+        assertThat("xyz", where(characters, StreamMatchers.equalTo(Stream.of('x', 'y', 'z'))));
     }
 
 

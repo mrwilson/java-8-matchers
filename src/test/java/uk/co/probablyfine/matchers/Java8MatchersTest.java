@@ -1,12 +1,11 @@
 package uk.co.probablyfine.matchers;
 
-import org.junit.Test;
 
-import static uk.co.probablyfine.matchers.Java8Matchers.where;
-import static uk.co.probablyfine.matchers.Java8Matchers.whereNot;
+import org.junit.jupiter.api.Test;
+
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.assertThat;
 
 public class Java8MatchersTest {
 

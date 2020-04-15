@@ -14,4 +14,6 @@ matrix:
     - jdk: openjdk9
     - jdk: openjdk11
 
-script: mvn verify
+install: true
+
+script: mvn clean install

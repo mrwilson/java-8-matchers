@@ -27,7 +27,7 @@ public class StreamMatchersTest {
 
     @Test
     public void contains_failureDifferingSingleItem() throws Exception {
-        assertThat(Stream.of("a"), is(Matchers.not(StreamMatchers.contains("b"))));
+        assertThat(Stream.of("a"), not(StreamMatchers.contains("b")));
     }
 
     @Test
@@ -37,7 +37,7 @@ public class StreamMatchersTest {
 
     @Test
     public void contains_failureDifferingLength() throws Exception {
-        assertThat(Stream.of("a"), is(Matchers.not(StreamMatchers.contains("a", "b"))));
+        assertThat(Stream.of("a"), not(StreamMatchers.contains("a", "b")));
     }
 
     @Test
@@ -47,7 +47,7 @@ public class StreamMatchersTest {
 
     @Test
     public void contains_failureDifferingItems() throws Exception {
-        assertThat(Stream.of("a","c"), is(Matchers.not(StreamMatchers.contains("a", "b"))));
+        assertThat(Stream.of("a","c"), not(StreamMatchers.contains("a", "b")));
     }
 
     @Test
@@ -232,11 +232,11 @@ public class StreamMatchersTest {
 
     @Test
     public void contains_handles_types() {
-        assertThat("xyz", where(s -> s.chars().mapToObj(i -> (char) i), contains('x', 'y', 'z')));
+        assertThat("xyz", where(s -> s.chars().mapToObj(i -> (char) i), StreamMatchers.contains('x', 'y', 'z')));
 
         DescribableFunction<String, BaseStream<Character, Stream<Character>>> characters = s -> s.chars().mapToObj(i -> (char) i);
-        assertThat("xyz", where(characters, contains('x', 'y', 'z')));
-        assertThat("xyz", where(characters, not(contains('x', 'y'))));
+        assertThat("xyz", where(characters, StreamMatchers.contains('x', 'y', 'z')));
+        assertThat("xyz", where(characters, not(StreamMatchers.contains('x', 'y'))));
     }
 
 

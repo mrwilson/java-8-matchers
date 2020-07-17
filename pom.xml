@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>co.unruly</groupId>
+    <groupId>uk.co.probablyfine</groupId>
     <artifactId>java-8-matchers</artifactId>
     <version>1.7-SNAPSHOT</version>
 
@@ -10,7 +10,7 @@
 
     <description>Hamcrest matchers for JDK8's Optionals and Streams, and the java.time package</description>
 
-    <url>https://github.com/unruly/java-8-matchers</url>
+    <url>https://github.com/mrwilson/java-8-matchers</url>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -21,8 +21,8 @@
 
     <developers>
         <developer>
-            <name>Unruly Developers</name>
-            <email>oss@unrulymedia.com</email>
+            <name>Alex Wilson</name>
+            <email>alex+github@probablyfine.co.uk</email>
         </developer>
     </developers>
 
@@ -34,9 +34,9 @@
     </licenses>
 
     <scm>
-        <connection>scm:git:git@github.com:unruly/${project.artifactId}.git</connection>
-        <developerConnection>scm:git:git@github.com:unruly/${project.artifactId}.git</developerConnection>
-        <url>git@github.com:unruly/${project.artifactId}.git</url>
+        <connection>scm:git:git@github.com:mrwilson/${project.artifactId}.git</connection>
+        <developerConnection>scm:git:git@github.com:mrwilson/${project.artifactId}.git</developerConnection>
+        <url>git@github.com:mrwilson/${project.artifactId}.git</url>
         <tag>HEAD</tag>
     </scm>
 

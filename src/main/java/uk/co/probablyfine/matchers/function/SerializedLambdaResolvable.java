@@ -1,4 +1,4 @@
-package co.unruly.matchers.function;
+package uk.co.probablyfine.matchers.function;
 
 import java.io.Serializable;
 import java.lang.invoke.SerializedLambda;

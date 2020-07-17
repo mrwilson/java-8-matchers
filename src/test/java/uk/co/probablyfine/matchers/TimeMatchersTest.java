@@ -1,4 +1,4 @@
-package co.unruly.matchers;
+package uk.co.probablyfine.matchers;
 
 import org.junit.Test;
 

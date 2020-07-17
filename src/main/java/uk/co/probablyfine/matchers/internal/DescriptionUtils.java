@@ -1,4 +1,4 @@
-package co.unruly.matchers.internal;
+package uk.co.probablyfine.matchers.internal;
 
 import static java.util.Arrays.binarySearch;
 

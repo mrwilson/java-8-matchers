@@ -2,9 +2,9 @@
 
 
 
-[![Build Status](https://travis-ci.org/unruly/java-8-matchers.svg?branch=master)](https://travis-ci.org/unruly/java-8-matchers)
-[![Release Version](https://img.shields.io/maven-central/v/co.unruly/java-8-matchers.svg)](https://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22co.unruly%22%20AND%20a%3A%22java-8-matchers%22)
-[![Javadocs](https://www.javadoc.io/badge/co.unruly/java-8-matchers.svg?color=yellow)](https://www.javadoc.io/doc/co.unruly/java-8-matchers)
+[![Build Status](https://travis-ci.org/mrwilson/java-8-matchers.svg?branch=master)](https://travis-ci.org/mrwilson/java-8-matchers)
+[![Release Version](https://img.shields.io/maven-central/v/uk.co.probablyfine/java-8-matchers.svg)](https://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22uk.co.probablyfine%22%20AND%20a%3A%22java-8-matchers%22)
+[![Javadocs](https://www.javadoc.io/badge/uk.co.probablyfine/java-8-matchers.svg?color=yellow)](https://www.javadoc.io/doc/uk.co.probablyfine/java-8-matchers)
 
 ## :warning: This is a hard fork of [unruly/java-8-matchers](https://github.com/unruly/java-8-matchers) as it is no longer maintained :warning:
 
@@ -27,7 +27,7 @@ Available from the Central Repository. In Maven style:
 
 ```xml
 <dependency>
-  <groupId>co.unruly</groupId>
+  <groupId>uk.co.probablyfine</groupId>
   <artifactId>java-8-matchers</artifactId>
   <version>1.6</version>
 </dependency>
@@ -121,7 +121,7 @@ assertThat(Period.of(1, 2, 3), TimeMatchers.matches(equalTo(1), equalTo(2), equa
 
 ## Method references and lambdas
 
-[`Java8Matchers`](https://oss.sonatype.org/service/local/repositories/releases/archive/co/unruly/java-8-matchers/1.6/java-8-matchers-1.6-javadoc.jar/!/co/unruly/matchers/Java8Matchers.html) enables asserting the state of objects of arbitrary types by using method references or lambdas to resolve values which can be matched by other matchers.
+[`Java8Matchers`](https://oss.sonatype.org/service/local/repositories/releases/archive/uk/co/probablyfine/java-8-matchers/1.6/java-8-matchers-1.6-javadoc.jar/!/uk/co/probablyfine/matchers/Java8Matchers.html) enables asserting the state of objects of arbitrary types by using method references or lambdas to resolve values which can be matched by other matchers.
 
 Say we have the following domain:
 
@@ -176,7 +176,7 @@ class ContactInfo {
 Following is some examples on how we can assert the state of the domain objects above:
 
 ```java
-import static co.unruly.matchers.Java8Matchers.where;
+import static uk.co.probablyfine.matchers.Java8Matchers.where;
 import static org.hamcrest.Matchers.is; //regular matcher from the Hamcrest library
 ...
 ContactInfo contactInfo = // resolve ContactInfo from somewhere
@@ -190,8 +190,8 @@ What is the point of performing the assert in this manner instead of just invoki
 This is especially helpful when asserting `boolean` values:
 
 ```java
-import static co.unruly.matchers.Java8Matchers.where;
-import static co.unruly.matchers.Java8Matchers.whereNot;
+import static uk.co.probablyfine.matchers.where;
+import static uk.co.probablyfine.matchers.whereNot;
 ...
 assertThat(EmailAddress.verified("john.doe@example.com"), where(EmailAddress::isVerified));
 

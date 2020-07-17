@@ -3,3 +3,8 @@ jdk:
    - openjdk8
    - openjdk9
    - openjdk11
+
+matrix:
+   allow_failures:
+      - jdk: openjdk9
+      - jdk: openjdk11

@@ -4,7 +4,7 @@
 
     <groupId>uk.co.probablyfine</groupId>
     <artifactId>java-8-matchers</artifactId>
-    <version>1.8</version>
+    <version>1.9-SNAPSHOT</version>
 
     <name>java-8-matchers</name>
 
@@ -36,7 +36,7 @@
         <connection>scm:git:git@github.com:mrwilson/${project.artifactId}.git</connection>
         <developerConnection>scm:git:git@github.com:mrwilson/${project.artifactId}.git</developerConnection>
         <url>git@github.com:mrwilson/${project.artifactId}.git</url>
-        <tag>java-8-matchers-1.8</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <dependencies>

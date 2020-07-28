@@ -1,15 +1,15 @@
 package uk.co.probablyfine.matchers;
 
-import uk.co.probablyfine.matchers.function.DescribableFunction;
-import uk.co.probablyfine.matchers.function.DescribablePredicate;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
+import uk.co.probablyfine.matchers.function.DescribableFunction;
+import uk.co.probablyfine.matchers.function.DescribablePredicate;
 
 import java.util.function.Function;
 
+import static org.hamcrest.Matchers.is;
 import static uk.co.probablyfine.matchers.internal.DescriptionUtils.withPrefixedArticle;
-import static org.hamcrest.CoreMatchers.is;
 
 public final class Java8Matchers {
 

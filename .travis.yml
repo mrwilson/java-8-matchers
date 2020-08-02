@@ -9,11 +9,6 @@ jdk:
   - openjdk9
   - openjdk11
 
-matrix:
-  allow_failures:
-    - jdk: openjdk9
-    - jdk: openjdk11
-
 install: true
 
 script: mvn clean install

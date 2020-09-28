@@ -3,9 +3,15 @@ package uk.co.probablyfine.matchers;
 
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Method;
+import java.util.stream.Stream;
+
+import static java.util.Comparator.comparing;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static uk.co.probablyfine.matchers.ApiHelper.existsInHamcrest;
 
 public class Java8MatchersTest {
 
@@ -52,6 +58,13 @@ public class Java8MatchersTest {
         int age() {
             return 42;
         }
+    }
+
+
+    @Test
+    void noMatchersNameClashWithHamcrestMatchers() {
+        assertAll(Stream.of(Java8Matchers.class.getMethods()).sorted(comparing(Method::getName))
+                .map(method -> () -> assertThat(method, not(existsInHamcrest()))));
     }
 
 }

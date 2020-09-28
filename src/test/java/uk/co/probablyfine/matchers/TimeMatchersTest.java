@@ -2,13 +2,19 @@ package uk.co.probablyfine.matchers;
 
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Method;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.stream.Stream;
 
+import static java.util.Comparator.comparing;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.not;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static uk.co.probablyfine.matchers.ApiHelper.existsInHamcrest;
 
 class TimeMatchersTest {
 
@@ -112,4 +118,11 @@ class TimeMatchersTest {
     void shouldNotCompileWithNonTimes() {
         assertThat(Integer.valueOf(3), TimeMatchers.after(Integer.valueOf(4)));
     }*/
+
+    @Test
+    void noMatchersNameClashWithHamcrestMatchers() {
+        assertAll(Stream.of(TimeMatchers.class.getMethods()).sorted(comparing(Method::getName))
+                .map(method -> () -> assertThat(method, not(existsInHamcrest()))));
+    }
+
 }

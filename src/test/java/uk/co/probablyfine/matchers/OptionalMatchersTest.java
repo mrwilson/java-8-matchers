@@ -4,78 +4,84 @@ import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.OptionalInt;
+import java.util.stream.Stream;
 
+import static java.util.Comparator.comparing;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.not;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static uk.co.probablyfine.matchers.ApiHelper.existsInHamcrest;
+import static uk.co.probablyfine.matchers.ApiHelper.isDeprecated;
 
 class OptionalMatchersTest {
 
     @Test
-    void empty_success() {
-        assertThat(Optional.empty(), OptionalMatchers.empty());
+    void notPresent_success() {
+        assertThat(Optional.empty(), OptionalMatchers.notPresent());
     }
 
     @Test
-    void empty_failure() {
-        assertThat(Optional.of(1), not(OptionalMatchers.empty()));
+    void notPresent_failure() {
+        assertThat(Optional.of(1), not(OptionalMatchers.notPresent()));
     }
 
     @Test
-    void empty_failureMessage() {
-        Helper.testFailingMatcher(Optional.of(1), OptionalMatchers.empty(), "An empty Optional","<Optional[1]>");
+    void notPresent_failureMessage() {
+        Helper.testFailingMatcher(Optional.of(1), OptionalMatchers.notPresent(), "An Optional with no value","<Optional[1]>");
     }
 
     @Test
-    void contains_success() {
-        assertThat(Optional.of("Hi!"), OptionalMatchers.contains("Hi!"));
+    void present_success() {
+        assertThat(Optional.of("Hi!"), OptionalMatchers.present("Hi!"));
     }
 
     @Test
-    void contains_failureNonEmpty() {
-        assertThat(Optional.of("Hi!"), not(OptionalMatchers.contains("Yay")));
+    void present_failureNonEmpty() {
+        assertThat(Optional.of("Hi!"), not(OptionalMatchers.present("Yay")));
     }
 
     @Test
-    void contains_failureEmpty() {
-        assertThat(Optional.empty(), not(OptionalMatchers.contains("Woot")));
+    void present_failureEmpty() {
+        assertThat(Optional.empty(), not(OptionalMatchers.present("Woot")));
     }
 
 
     @Test
-    void contains_failureMessages() {
-        Helper.testFailingMatcher(Optional.of(1), OptionalMatchers.contains(2), "Optional[2]","<Optional[1]>");
+    void present_failureMessages() {
+        Helper.testFailingMatcher(Optional.of(1), OptionalMatchers.present(2), "Optional[2]","<Optional[1]>");
     }
 
     @Test
-    void containsMatcher_success() {
-        assertThat(Optional.of(4), OptionalMatchers.contains(Matchers.greaterThan(3)));
+    void presentMatcher_success() {
+        assertThat(Optional.of(4), OptionalMatchers.present(Matchers.greaterThan(3)));
     }
 
     @Test
-    void containsMatcher_success_typechecksWhenOptionalsArgIsStrictSubtype() {
+    void presentMatcher_success_typechecksWhenOptionalsArgIsStrictSubtype() {
         Optional<List<String>> optionalToMatch = Optional.of(Arrays.asList("a"));
         Matcher<Iterable<? super String>> matcherOfStrictSuperType = hasItem("a");
-        assertThat(optionalToMatch, OptionalMatchers.contains(matcherOfStrictSuperType));
+        assertThat(optionalToMatch, OptionalMatchers.present(matcherOfStrictSuperType));
     }
 
     @Test
-    void containsMatcher_failureDiffering() {
-        assertThat(Optional.of(100), not(OptionalMatchers.contains(Matchers.lessThanOrEqualTo(19))));
+    void presentMatcher_failureDiffering() {
+        assertThat(Optional.of(100), not(OptionalMatchers.present(Matchers.lessThanOrEqualTo(19))));
     }
 
     @Test
-    void containsMatcher_failureEmpty() {
-        assertThat(Optional.empty(), not(OptionalMatchers.contains(Matchers.lessThanOrEqualTo(19))));
+    void presentMatcher_failureEmpty() {
+        assertThat(Optional.empty(), not(OptionalMatchers.present(Matchers.lessThanOrEqualTo(19))));
     }
 
     @Test
-    void containsMatcher_failureMessage() {
-        Helper.testFailingMatcher(Optional.of(2), OptionalMatchers.contains(Matchers.equalTo(4)), "Optional with an item that matches <4>","<Optional[2]>");
+    void presentMatcher_failureMessage() {
+        Helper.testFailingMatcher(Optional.of(2), OptionalMatchers.present(Matchers.equalTo(4)), "Optional with an item that matches <4>","<Optional[2]>");
     }
 
     @Test
@@ -116,5 +122,12 @@ class OptionalMatchersTest {
     @Test
     void containsIntMatcher_failureDiffering() {
         assertThat(OptionalInt.of(0), not(OptionalMatchers.containsInt(Matchers.equalTo(1))));
+    }
+
+    @Test
+    void noNonDeprecatedMatchersNameClashWithHamcrestMatchers() {
+        assertAll(Stream.of(OptionalMatchers.class.getMethods())
+                .filter(method -> !isDeprecated(method)).sorted(comparing(Method::getName))
+                .map(method -> () -> assertThat(method, not(existsInHamcrest()))));
     }
 }

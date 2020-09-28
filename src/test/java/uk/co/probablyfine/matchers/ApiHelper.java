@@ -4,6 +4,7 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
 
+import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,10 @@ final class ApiHelper {
     static boolean isMatcherMethod(Method method) {
         int modifiers = method.getModifiers();
         return isStatic(modifiers) && isPublic(modifiers) && org.hamcrest.Matcher.class.isAssignableFrom(method.getReturnType());
+    }
+
+    static boolean isDeprecated(AnnotatedElement element) {
+        return element.getAnnotation(Deprecated.class) != null;
     }
 
     static Matcher<Method> existsInHamcrest() {

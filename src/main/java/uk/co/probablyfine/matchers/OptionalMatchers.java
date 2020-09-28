@@ -10,10 +10,11 @@ import java.util.OptionalInt;
 import java.util.OptionalLong;
 
 public class OptionalMatchers {
+
     /**
      * Matches an empty Optional.
      */
-    public static <T> Matcher<Optional<T>> empty() {
+    public static <T> Matcher<Optional<T>> notPresent() {
         return new TypeSafeMatcher<Optional<T>>() {
             @Override
             protected boolean matchesSafely(Optional<T> item) {
@@ -22,9 +23,20 @@ public class OptionalMatchers {
 
             @Override
             public void describeTo(Description description) {
-                description.appendText("An empty Optional");
+                description.appendText("An Optional with no value");
             }
         };
+    }
+
+    /**
+     * Matches an empty Optional.
+     *
+     * @deprecated name clashes with {@link org.hamcrest.Matchers#empty()},
+     *             use {@link #notPresent()} instead
+     */
+    @Deprecated
+    public static <T> Matcher<Optional<T>> empty() {
+        return notPresent();
     }
 
     /**
@@ -33,7 +45,7 @@ public class OptionalMatchers {
      * @param content Expected contents of the Optional
      * @param <T> The type of the Optional's content
      */
-    public static <T> Matcher<Optional<T>> contains(T content) {
+    public static <T> Matcher<Optional<T>> present(T content) {
         return new TypeSafeMatcher<Optional<T>>() {
             @Override
             protected boolean matchesSafely(Optional<T> item) {
@@ -48,13 +60,27 @@ public class OptionalMatchers {
     }
 
     /**
+     * Matches a non empty Optional with the given content
+     *
+     * @param content Expected contents of the Optional
+     * @param <T> The type of the Optional's content
+     *
+     * @deprecated name clashes with {@link org.hamcrest.Matchers#contains(Object...)},
+     *             use {@link #present(Object)} instead
+     */
+    @Deprecated
+    public static <T> Matcher<Optional<T>> contains(T content) {
+        return present(content);
+    }
+
+    /**
      * Matches a non empty Optional with content matching the given matcher
      *
      * @param matcher To match against the Optional's content
      * @param <T> The type of the Optional's content
      * @param <S> The type matched by the matcher, a subtype of T
      */
-    public static <T, S extends T> Matcher<Optional<S>> contains(Matcher<T> matcher) {
+    public static <T, S extends T> Matcher<Optional<S>> present(Matcher<T> matcher) {
         return new TypeSafeMatcher<Optional<S>>() {
             @Override
             protected boolean matchesSafely(Optional<S> item) {
@@ -66,6 +92,20 @@ public class OptionalMatchers {
                 description.appendText("Optional with an item that matches " + matcher);
             }
         };
+    }
+
+    /**
+     * Matches a non empty Optional with content matching the given matcher
+     *
+     * @param matcher To match against the Optional's content
+     * @param <T> The type of the Optional's content
+     * @param <S> The type matched by the matcher, a subtype of T
+     * @deprecated name clashes with {@link org.hamcrest.Matchers#contains(Matcher)},
+     *             use {@link #present(Matcher)} instead
+     */
+    @Deprecated
+    public static <T, S extends T> Matcher<Optional<S>> contains(Matcher<T> matcher) {
+        return present(matcher);
     }
 
     /**

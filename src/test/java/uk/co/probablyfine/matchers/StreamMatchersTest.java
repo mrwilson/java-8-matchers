@@ -5,90 +5,98 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import uk.co.probablyfine.matchers.function.DescribableFunction;
 
+import java.lang.reflect.Method;
 import java.util.stream.BaseStream;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
+import static java.util.Comparator.comparing;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.hamcrest.Matchers.not;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static uk.co.probablyfine.matchers.ApiHelper.existsInHamcrest;
+import static uk.co.probablyfine.matchers.ApiHelper.isDeprecated;
 import static uk.co.probablyfine.matchers.Java8Matchers.where;
 
 class StreamMatchersTest {
 
     @Test
     void equalTo_failureDifferingSingleItem() {
-        assertThat(Stream.of("a"), is(not(StreamMatchers.equalTo(Stream.of("b")))));
+        assertThat(Stream.of("a"), is(not(StreamMatchers.yieldsSameAs(Stream.of("b")))));
     }
 
     @Test
     void contains_failureDifferingSingleItem() {
-        assertThat(Stream.of("a"), not(StreamMatchers.contains("b")));
+        assertThat(Stream.of("a"), not(StreamMatchers.yieldsExactly("b")));
     }
 
     @Test
     void equalTo_failureDifferingLength() {
-        assertThat(Stream.of("a"), is(not(StreamMatchers.equalTo(Stream.of("a", "b")))));
+        assertThat(Stream.of("a"), not(StreamMatchers.yieldsSameAs(Stream.of("a", "b"))));
     }
 
     @Test
     void contains_failureDifferingLength() {
-        assertThat(Stream.of("a"), not(StreamMatchers.contains("a", "b")));
+        assertThat(Stream.of("a"), not(StreamMatchers.yieldsExactly("a", "b")));
     }
 
     @Test
     void equalTo_failureDifferingItems() {
-        assertThat(Stream.of("a","c"), is(not(StreamMatchers.equalTo(Stream.of("a", "b")))));
+        assertThat(Stream.of("a","c"), not(StreamMatchers.yieldsSameAs(Stream.of("a", "b"))));
     }
 
     @Test
     void contains_failureDifferingItems() {
-        assertThat(Stream.of("a","c"), not(StreamMatchers.contains("a", "b")));
+        assertThat(Stream.of("a","c"), not(StreamMatchers.yieldsExactly("a", "b")));
     }
 
     @Test
     void equalTo_successEmpty() {
-        assertThat(Stream.empty(), StreamMatchers.equalTo(Stream.empty()));
+        assertThat(Stream.empty(), StreamMatchers.yieldsSameAs(Stream.empty()));
     }
 
     @Test
     void empty_Success() {
-        assertThat(Stream.empty(), StreamMatchers.empty());
+        assertThat(Stream.empty(), StreamMatchers.yieldsNothing());
     }
 
     @Test
     void empty_Failure() {
-        Helper.testFailingMatcher(Stream.of(3), StreamMatchers.empty(), "An empty Stream", "A non empty Stream starting with <3>");
+        Helper.testFailingMatcher(Stream.of(3), StreamMatchers.yieldsNothing(),
+                "A Stream yielding no elements", "the Stream started with <3> and is then exhausted");
+        Helper.testFailingMatcher(IntStream.iterate(0, i -> i + 1), StreamMatchers.yieldsNothing(),
+                "A Stream yielding no elements", "the Stream started with <0> and will yield even more elements");
     }
 
     @Test
     void equalToIntStream_success() {
-        assertThat(IntStream.range(1, 10), StreamMatchers.equalTo(IntStream.range(1, 10)));
+        assertThat(IntStream.range(1, 10), StreamMatchers.yieldsSameAs(IntStream.range(1, 10)));
     }
 
     @Test
     void containsIntStream_success() {
-        assertThat(IntStream.range(1, 4), StreamMatchers.contains(1, 2, 3));
+        assertThat(IntStream.range(1, 4), StreamMatchers.yieldsExactly(1, 2, 3));
     }
 
     @Test
     void equalTo_successManyItems() {
-        assertThat(Stream.of("a", "b", "c"), StreamMatchers.equalTo(Stream.of("a", "b", "c")));
+        assertThat(Stream.of("a", "b", "c"), StreamMatchers.yieldsSameAs(Stream.of("a", "b", "c")));
     }
 
     @Test
     void contains_successManyItems() {
-        assertThat(Stream.of("a", "b", "c"), StreamMatchers.contains("a", "b", "c"));
+        assertThat(Stream.of("a", "b", "c"), StreamMatchers.yieldsExactly("a", "b", "c"));
     }
 
     @Test
     void contains_is_nullsafe() {
-        assertThat(Stream.of("a", null, "c"), StreamMatchers.contains("a", null, "c"));
+        assertThat(Stream.of("a", null, "c"), StreamMatchers.yieldsExactly("a", null, "c"));
     }
 
     @Test
@@ -214,7 +222,7 @@ class StreamMatchersTest {
 
     @Test
     void equalTo_failureMessages() {
-        Matcher<Stream<String>> matcher = StreamMatchers.equalTo(Stream.of("a", "b", "c", "d", "e", "f", "g", "h"));
+        Matcher<Stream<String>> matcher = StreamMatchers.yieldsSameAs(Stream.of("a", "b", "c", "d", "e", "f", "g", "h"));
         Stream<String> testData = Stream.of("a", "b", "c", "d", "e");
         Helper.testFailingMatcher(testData, matcher, "Stream of [\"a\",\"b\",\"c\",\"d\",\"e\",\"f\",\"g\",\"h\"]", "Stream of [\"a\",\"b\",\"c\",\"d\",\"e\"]");
     }
@@ -222,36 +230,36 @@ class StreamMatchersTest {
     @Test
     public void equalTo_handles_types() {
         Stream<Character> expectedStream = Stream.of('x', 'y', 'z');
-        assertThat("xyz", where(s -> s.chars().mapToObj(i -> (char) i), StreamMatchers.equalTo(expectedStream)));
+        assertThat("xyz", where(s -> s.chars().mapToObj(i -> (char) i), StreamMatchers.yieldsSameAs(expectedStream)));
 
         BaseStream<Character, Stream<Character>> expectedBaseStream = Stream.of('x', 'y', 'z');
-        assertThat("xyz", where(s -> s.chars().mapToObj(i -> (char) i), StreamMatchers.equalTo(expectedBaseStream)));
+        assertThat("xyz", where(s -> s.chars().mapToObj(i -> (char) i), StreamMatchers.yieldsSameAs(expectedBaseStream)));
 
         DescribableFunction<String, BaseStream<Character, Stream<Character>>> characters = s -> s.chars().mapToObj(i -> (char) i);
-        assertThat("xyz", where(characters, StreamMatchers.equalTo(Stream.of('x', 'y', 'z'))));
+        assertThat("xyz", where(characters, StreamMatchers.yieldsSameAs(Stream.of('x', 'y', 'z'))));
     }
 
     @Test
     public void contains_handles_types() {
-        assertThat("xyz", where(s -> s.chars().mapToObj(i -> (char) i), StreamMatchers.contains('x', 'y', 'z')));
+        assertThat("xyz", where(s -> s.chars().mapToObj(i -> (char) i), StreamMatchers.yieldsExactly('x', 'y', 'z')));
 
         DescribableFunction<String, BaseStream<Character, Stream<Character>>> characters = s -> s.chars().mapToObj(i -> (char) i);
-        assertThat("xyz", where(characters, StreamMatchers.contains('x', 'y', 'z')));
-        assertThat("xyz", where(characters, not(StreamMatchers.contains('x', 'y'))));
+        assertThat("xyz", where(characters, StreamMatchers.yieldsExactly('x', 'y', 'z')));
+        assertThat("xyz", where(characters, not(StreamMatchers.yieldsExactly('x', 'y'))));
     }
 
 
     @Test
     void contains_failureMessages() {
         Stream<String> testData = Stream.of("a", "b", "c", "d", "e");
-        Matcher<Stream<String>> matcher = StreamMatchers.contains("a", "b", "c", "d", "e", "f", "g", "h");
+        Matcher<Stream<String>> matcher = StreamMatchers.yieldsExactly("a", "b", "c", "d", "e", "f", "g", "h");
         Helper.testFailingMatcher(testData, matcher, "Stream of [\"a\",\"b\",\"c\",\"d\",\"e\",\"f\",\"g\",\"h\"]", "Stream of [\"a\",\"b\",\"c\",\"d\",\"e\"]");
     }
 
     @Test
     void equalToIntStream_failureMessages() {
         IntStream testData = IntStream.range(8, 10);
-        Matcher<IntStream> matcher = StreamMatchers.equalTo(IntStream.range(0, 6));
+        Matcher<IntStream> matcher = StreamMatchers.yieldsSameAs(IntStream.range(0, 6));
         Helper.testFailingMatcher(testData, matcher, "Stream of [<0>,<1>,<2>,<3>,<4>,<5>]", "Stream of [<8>,<9>]");
     }
 
@@ -337,19 +345,26 @@ class StreamMatchersTest {
 
     @Test
     void contains_returnsParameterizedMatcher() {
-        usesStreamMatcher(Stream.of(10), StreamMatchers.contains(10));
+        usesStreamMatcher(Stream.of(10), StreamMatchers.yieldsExactly(10));
     }
 
     @Test
     void contains_acceptsMatchers() {
         usesStreamMatcher(
             Stream.of(10, 20, 30),
-            StreamMatchers.contains(
+            StreamMatchers.yieldsExactly(
                 is(10),
                 lessThanOrEqualTo(20),
                 not(20)
             )
         );
+    }
+
+    @Test
+    void noNonDeprecatedMatchersNameClashWithHamcrestMatchers() {
+        assertAll(Stream.of(StreamMatchers.class.getMethods())
+                .filter(method -> !isDeprecated(method)).sorted(comparing(Method::getName))
+                .map(method -> () -> assertThat(method, not(existsInHamcrest()))));
     }
 
     private static void usesStreamMatcher(Stream<Integer> stream, Matcher<Stream<Integer>> matcher) {

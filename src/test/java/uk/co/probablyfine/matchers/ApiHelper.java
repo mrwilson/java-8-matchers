@@ -6,29 +6,13 @@ import org.hamcrest.TypeSafeDiagnosingMatcher;
 
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Stream;
 
 import static java.lang.reflect.Modifier.isPublic;
 import static java.lang.reflect.Modifier.isStatic;
-import static java.util.Collections.emptyList;
-import static java.util.stream.Collectors.groupingBy;
 
 final class ApiHelper {
 
-    static final Map<String, List<Method>> HAMCREST_MATCHER_METHODS_BY_NAME = Stream.of(org.hamcrest.Matchers.class.getMethods())
-            .filter(ApiHelper::isMatcherMethod)
-            .collect(groupingBy(Method::getName));
-
-    static boolean isMatcherMethod(Method method) {
-        int modifiers = method.getModifiers();
-        return isStatic(modifiers) && isPublic(modifiers) && org.hamcrest.Matcher.class.isAssignableFrom(method.getReturnType());
-    }
-
-    static boolean isDeprecated(AnnotatedElement element) {
-        return element.getAnnotation(Deprecated.class) != null;
-    }
+    private static final ApiInspector hamcrestApi = new ApiInspector(org.hamcrest.Matchers.class, ApiHelper::isMatcherMethod);
 
     static Matcher<Method> existsInHamcrest() {
         return new TypeSafeDiagnosingMatcher<Method>() {
@@ -39,24 +23,28 @@ final class ApiHelper {
 
             @Override
             protected boolean matchesSafely(Method method, Description mismatchDescription) {
-                boolean matches = true;
-                if (!isMatcherMethod(method)) {
-                    mismatchDescription.appendText(describe(method) + " is not a Matcher method");
-                    matches = false;
+                if (isMatcherMethod(method) && hamcrestApi.hasEquivalentTo(method)) {
+                    return true;
                 }
-                List<Method> existingMethods = HAMCREST_MATCHER_METHODS_BY_NAME.getOrDefault(method.getName(), emptyList());
-                if (existingMethods.isEmpty()) {
-                    mismatchDescription.appendText((!matches ? ", and " : describe(method) + " ") + "does not exist in Hamcrest Matchers API");
-                    matches = false;
-                }
-                return matches;
+                mismatchDescription.appendText(describe(method) + " does not exist in Hamcrest Matchers API");
+                return false;
             }
         };
+    }
+
+    static boolean isMatcherMethod(Method method) {
+        int modifiers = method.getModifiers();
+        return isStatic(modifiers) && isPublic(modifiers) && org.hamcrest.Matcher.class.isAssignableFrom(method.getReturnType());
+    }
+
+    static boolean isDeprecated(AnnotatedElement element) {
+        return element.getAnnotation(Deprecated.class) != null;
     }
 
     private static String describe(Method method) {
         return method.getReturnType().getSimpleName() + " " + method.getName() + "(" + (method.getParameterCount() > 0 ? ".." : "") + ")";
     }
+
 
     private ApiHelper() {
     }

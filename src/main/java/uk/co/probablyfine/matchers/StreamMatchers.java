@@ -17,7 +17,13 @@ import java.util.stream.Stream;
 
 public class StreamMatchers {
 
-    public static <T,S extends BaseStream<T,? extends S>> Matcher<S> empty() {
+    /**
+     * Matcher for a stream which yields no elements.
+     *
+     * @param <T> The type of items
+     * @param <S> The type of the BaseStream
+     */
+    public static <T,S extends BaseStream<T, ? extends S>> Matcher<S> yieldsNothing() {
         return new TypeSafeMatcher<S>() {
 
             private Iterator<T> actualIterator;
@@ -30,14 +36,33 @@ public class StreamMatchers {
 
             @Override
             public void describeTo(Description description) {
-                description.appendText("An empty Stream");
+                description.appendText("A Stream yielding no elements");
             }
 
             @Override
             protected void describeMismatchSafely(S item, Description description) {
-                description.appendText("A non empty Stream starting with ").appendValue(actualIterator.next());
+                description.appendText("the Stream started with ").appendValue(actualIterator.next());
+                if (actualIterator.hasNext()) {
+                    description.appendText(" and will yield even more elements");
+                } else {
+                    description.appendText(" and is then exhausted");
+                }
             }
         };
+    }
+
+    /**
+     * Matcher for an empty stream.
+     *
+     * @param <T> The type of items
+     * @param <S> The type of the BaseStream
+     *
+     * @deprecated name clashes with {@link org.hamcrest.Matchers#empty()},
+     *             use {@link #yieldsNothing()} instead
+     */
+    @Deprecated
+    public static <T,S extends BaseStream<T, ? extends S>> Matcher<S> empty() {
+        return yieldsNothing();
     }
 
     /**
@@ -54,13 +79,29 @@ public class StreamMatchers {
      * @see #startsWithLong
      * @see #startsWithDouble
      */
-    public static <T,S extends BaseStream<T,? extends S>> Matcher<S> equalTo(S expected) {
+    public static <T,S extends BaseStream<T,? extends S>> Matcher<S> yieldsSameAs(S expected) {
         return new BaseStreamMatcher<T,S>() {
             @Override
             protected boolean matchesSafely(S actual) {
                 return remainingItemsEqual(expected.iterator(), actual.iterator());
             }
         };
+    }
+
+    /**
+     * A matcher for a finite Stream producing the same number of items as the expected Stream,
+     * and producing equal items as expected in the same order.
+     *
+     * @param expected A BaseStream against which to compare
+     * @param <T> The type of items produced by each BaseStream
+     * @param <S> The type of BaseStream
+     *
+     * @deprecated name clashes with {@link org.hamcrest.Matchers#equalTo(Object)},
+     *             use {@link #yieldsSameAs(BaseStream)} instead
+     */
+    @Deprecated
+    public static <T,S extends BaseStream<T,? extends S>> Matcher<S> equalTo(S expected) {
+        return yieldsSameAs(expected);
     }
 
     /**
@@ -370,14 +411,29 @@ public class StreamMatchers {
      * @see #startsWithDouble(double...)
      */
     @SafeVarargs
-    public static <T, S extends BaseStream<T, ? extends S>> Matcher<S> contains(Matcher<T>... expectedMatchers) {
+    public static <T, S extends BaseStream<T, ? extends S>> Matcher<S> yieldsExactly(Matcher<T>... expectedMatchers) {
         return new BaseMatcherStreamMatcher<T,S>() {
-
             @Override
             protected boolean matchesSafely(S actual) {
                 return remainingItemsMatch(new ArrayIterator<>(expectedMatchers), actual.iterator());
             }
         };
+    }
+
+    /**
+     * The BaseStream must produce exactly the given expected items in order, and no more.
+     *
+     * @param expectedMatchers Matchers for the items that should be produced by the BaseStream
+     * @param <T> The type of items
+     * @param <S> The type of the BaseStream
+     *
+     * @deprecated name clashes with {@link org.hamcrest.Matchers#contains(Matcher...)},
+     *             use {@link #yieldsExactly(Matcher...)} instead
+     */
+    @SafeVarargs
+    @Deprecated
+    public static <T, S extends BaseStream<T, ? extends S>> Matcher<S> contains(Matcher<T>... expectedMatchers) {
+        return yieldsExactly(expectedMatchers);
     }
 
     /**
@@ -393,13 +449,29 @@ public class StreamMatchers {
      * @see #startsWithDouble(double...)
      */
     @SafeVarargs
-    public static <T, S extends BaseStream<T, ? extends S>> Matcher<S> contains(T... expected) {
+    public static <T, S extends BaseStream<T, ? extends S>> Matcher<S> yieldsExactly(T... expected) {
         return new BaseStreamMatcher<T,S>() {
             @Override
             protected boolean matchesSafely(S actual) {
                 return remainingItemsEqual(new ArrayIterator<>(expected), actual.iterator());
             }
         };
+    }
+
+    /**
+     * The BaseStream must produce exactly the given expected items in order, and no more.
+     *
+     * @param expected The items that should be produced by the BaseStream
+     * @param <T> The type of items
+     * @param <S> The type of the BaseStream
+     *
+     * @deprecated name clashes with {@link org.hamcrest.Matchers#contains(Object...)},
+     *             use {@link #yieldsExactly(Object...)} instead
+     */
+    @SafeVarargs
+    @Deprecated
+    public static <T, S extends BaseStream<T, ? extends S>> Matcher<S> contains(T... expected) {
+        return yieldsExactly(expected);
     }
 
     /**

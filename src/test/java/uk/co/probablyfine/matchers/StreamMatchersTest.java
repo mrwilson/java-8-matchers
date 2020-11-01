@@ -20,8 +20,9 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.hamcrest.Matchers.not;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static uk.co.probablyfine.matchers.ApiHelper.existsInHamcrest;
+import static uk.co.probablyfine.matchers.ApiHelper.describe;
 import static uk.co.probablyfine.matchers.ApiHelper.isDeprecated;
+import static uk.co.probablyfine.matchers.HamcrestApiMatchers.existsInHamcrest;
 import static uk.co.probablyfine.matchers.Java8Matchers.where;
 
 class StreamMatchersTest {
@@ -366,6 +367,15 @@ class StreamMatchersTest {
                 .filter(method -> !isDeprecated(method)).sorted(comparing(Method::getName))
                 .map(method -> () -> assertThat(method, not(existsInHamcrest()))));
     }
+
+    @Test
+    void relatedMatchersOfDeprecatedMatchersAreAlsoDeprecated() {
+        ApiInspector streamMatchersApi = new ApiInspector(StreamMatchers.class, ApiHelper::isMatcherMethod);
+        assertAll(streamMatchersApi.getDeprecated()
+                .flatMap(streamMatchersApi::findRelatedOf).distinct()
+                .map(relatedMethod -> () -> assertThat(describe(relatedMethod) + " is deprecated", relatedMethod, where(ApiHelper::isDeprecated))));
+    }
+
 
     private static void usesStreamMatcher(Stream<Integer> stream, Matcher<Stream<Integer>> matcher) {
         assertThat(stream, matcher);

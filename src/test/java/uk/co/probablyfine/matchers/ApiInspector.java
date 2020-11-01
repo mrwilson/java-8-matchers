@@ -28,6 +28,20 @@ final class ApiInspector {
                 .anyMatch(hamcrestMethod -> acceptsArgumentsOfTypes(hamcrestMethod, method.getParameterTypes()));
     }
 
+    public Stream<Method> allMethods() {
+        return apiMethodsByName.values().stream().flatMap(List::stream);
+    }
+
+    public Stream<Method> getDeprecated() {
+        return allMethods().filter(ApiHelper::isDeprecated);
+    }
+
+    public Stream<Method> findRelatedOf(Method method) {
+        return allMethods()
+                .filter(apiMethod -> apiMethod.getName().startsWith(method.getName()))
+                .filter(related -> !related.equals(method));
+    }
+
     private static boolean acceptsArgumentsOfTypes(Method method, Class<?> ... argTypes) {
         Class<?>[] parameterTypes = method.getParameterTypes();
         if (parameterTypes.length != argTypes.length) {
@@ -41,5 +55,8 @@ final class ApiInspector {
         }
         return true;
     }
+
+
+
 
 }

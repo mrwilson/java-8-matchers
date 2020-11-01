@@ -16,8 +16,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.not;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static uk.co.probablyfine.matchers.ApiHelper.existsInHamcrest;
 import static uk.co.probablyfine.matchers.ApiHelper.isDeprecated;
+import static uk.co.probablyfine.matchers.HamcrestApiMatchers.existsInHamcrest;
 
 class OptionalMatchersTest {
 

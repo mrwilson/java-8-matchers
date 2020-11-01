@@ -12,7 +12,7 @@ import java.util.OptionalLong;
 public class OptionalMatchers {
 
     /**
-     * Matches an empty Optional.
+     * Matches a not present Optional.
      */
     public static <T> Matcher<Optional<T>> notPresent() {
         return new TypeSafeMatcher<Optional<T>>() {
@@ -29,7 +29,7 @@ public class OptionalMatchers {
     }
 
     /**
-     * Matches an empty Optional.
+     * Matches a not present Optional.
      *
      * @deprecated name clashes with {@link org.hamcrest.Matchers#empty()},
      *             use {@link #notPresent()} instead
@@ -40,7 +40,7 @@ public class OptionalMatchers {
     }
 
     /**
-     * Matches a non empty Optional with the given content
+     * Matches a present Optional with the given content
      *
      * @param content Expected contents of the Optional
      * @param <T> The type of the Optional's content
@@ -60,7 +60,7 @@ public class OptionalMatchers {
     }
 
     /**
-     * Matches a non empty Optional with the given content
+     * Matches a present Optional with the given content
      *
      * @param content Expected contents of the Optional
      * @param <T> The type of the Optional's content
@@ -74,7 +74,7 @@ public class OptionalMatchers {
     }
 
     /**
-     * Matches a non empty Optional with content matching the given matcher
+     * Matches a present Optional with content matching the given matcher
      *
      * @param matcher To match against the Optional's content
      * @param <T> The type of the Optional's content
@@ -95,7 +95,7 @@ public class OptionalMatchers {
     }
 
     /**
-     * Matches a non empty Optional with content matching the given matcher
+     * Matches a present Optional with content matching the given matcher
      *
      * @param matcher To match against the Optional's content
      * @param <T> The type of the Optional's content
@@ -109,9 +109,9 @@ public class OptionalMatchers {
     }
 
     /**
-     * Matches an empty OptionalInt.
+     * Matches an not present OptionalInt.
      */
-    public static Matcher<OptionalInt> emptyInt() {
+    public static Matcher<OptionalInt> notPresentInt() {
         return new TypeSafeMatcher<OptionalInt>() {
             @Override
             protected boolean matchesSafely(OptionalInt item) {
@@ -120,17 +120,28 @@ public class OptionalMatchers {
 
             @Override
             public void describeTo(Description description) {
-                description.appendText("An empty OptionalInt");
+                description.appendText("An OptionalInt with no value");
             }
         };
     }
 
     /**
-     * Matches a non empty OptionalInt with the given content
+     * Matches a not present OptionalInt.
+     *
+     * @deprecated Matcher is replaced with {@link #notPresentInt()} to
+     *             align with naming of {@link #notPresent()}.
+     */
+    @Deprecated
+    public static Matcher<OptionalInt> emptyInt() {
+        return notPresentInt();
+    }
+
+    /**
+     * Matches a present OptionalInt with the given content
      *
      * @param content Expected contents of the Optional
      */
-    public static Matcher<OptionalInt> containsInt(int content) {
+    public static Matcher<OptionalInt> presentInt(int content) {
         return new TypeSafeMatcher<OptionalInt>() {
             @Override
             protected boolean matchesSafely(OptionalInt item) {
@@ -145,11 +156,24 @@ public class OptionalMatchers {
     }
 
     /**
-     * Matches a non empty OptionalInt with content matching the given matcher
+     * Matches a present OptionalInt with the given content
+     *
+     * @param content Expected contents of the Optional
+     *
+     * @deprecated Matcher is replaced with {@link #presentInt(int)} to
+     *             align with naming of {@link #present(Object)}.
+     */
+    @Deprecated
+    public static Matcher<OptionalInt> containsInt(int content) {
+        return presentInt(content);
+    }
+
+    /**
+     * Matches a present OptionalInt with content matching the given matcher
      *
      * @param matcher To match against the OptionalInt's content
      */
-    public static Matcher<OptionalInt> containsInt(Matcher<Integer> matcher) {
+    public static Matcher<OptionalInt> presentInt(Matcher<Integer> matcher) {
         return new TypeSafeMatcher<OptionalInt>() {
             @Override
             protected boolean matchesSafely(OptionalInt item) {
@@ -158,15 +182,28 @@ public class OptionalMatchers {
 
             @Override
             public void describeTo(Description description) {
-                description.appendText("OptionalInt with an item that matches" + matcher);
+                description.appendText("OptionalInt with an item that matches " + matcher);
             }
         };
     }
 
     /**
-     * Matches an empty OptionalLong.
+     * Matches a present OptionalInt with content matching the given matcher
+     *
+     * @param matcher To match against the OptionalInt's content
+     *
+     * @deprecated Matcher is replaced with {@link #presentInt(Matcher)} to
+     *             align with naming of {@link #present(Matcher)}.
      */
-    public static Matcher<OptionalLong> emptyLong() {
+    @Deprecated
+    public static Matcher<OptionalInt> containsInt(Matcher<Integer> matcher) {
+        return presentInt(matcher);
+    }
+
+    /**
+     * Matches an OptionalLong with no value.
+     */
+    public static Matcher<OptionalLong> notPresentLong() {
         return new TypeSafeMatcher<OptionalLong>() {
             @Override
             protected boolean matchesSafely(OptionalLong item) {
@@ -175,17 +212,28 @@ public class OptionalMatchers {
 
             @Override
             public void describeTo(Description description) {
-                description.appendText("An empty OptionalLong");
+                description.appendText("An OptionalLong with no value");
             }
         };
     }
 
     /**
-     * Matches a non empty OptionalLong with the given content
+     * Matches a not present OptionalLong.
+     *
+     * @deprecated Matcher is replaced with {@link #notPresentLong()} to
+     *             align with naming of {@link #notPresent()}.
+     */
+    @Deprecated
+    public static Matcher<OptionalLong> emptyLong() {
+        return notPresentLong();
+    }
+
+    /**
+     * Matches a present OptionalLong with the given content
      *
      * @param content Expected contents of the Optional
      */
-    public static Matcher<OptionalLong> containsLong(long content) {
+    public static Matcher<OptionalLong> presentLong(long content) {
         return new TypeSafeMatcher<OptionalLong>() {
             @Override
             protected boolean matchesSafely(OptionalLong item) {
@@ -200,11 +248,24 @@ public class OptionalMatchers {
     }
 
     /**
-     * Matches a non empty OptionalLong with content matching the given matcher
+     * Matches a present OptionalLong with the given content
+     *
+     * @param content Expected contents of the Optional
+     *
+     * @deprecated Matcher is replaced with {@link #presentLong(long)} to
+     *             align with naming of {@link #present(Object)}.
+     */
+    @Deprecated
+    public static Matcher<OptionalLong> containsLong(long content) {
+        return presentLong(content);
+    }
+
+    /**
+     * Matches a present OptionalLong with content matching the given matcher
      *
      * @param matcher To match against the OptionalLong's content
      */
-    public static Matcher<OptionalLong> containsLong(Matcher<Long> matcher) {
+    public static Matcher<OptionalLong> presentLong(Matcher<Long> matcher) {
         return new TypeSafeMatcher<OptionalLong>() {
             @Override
             protected boolean matchesSafely(OptionalLong item) {
@@ -213,15 +274,28 @@ public class OptionalMatchers {
 
             @Override
             public void describeTo(Description description) {
-                description.appendText("OptionalLong with an item that matches" + matcher);
+                description.appendText("OptionalLong with an item that matches " + matcher);
             }
         };
     }
 
     /**
-     * Matches an empty OptionalDouble.
+     * Matches a present OptionalLong with content matching the given matcher
+     *
+     * @param matcher To match against the OptionalLong's content
+     *
+     * @deprecated Matcher is replaced with {@link #presentLong(Matcher)} to
+     *             align with naming of {@link #present(Matcher)}.
      */
-    public static Matcher<OptionalDouble> emptyDouble() {
+    @Deprecated
+    public static Matcher<OptionalLong> containsLong(Matcher<Long> matcher) {
+        return presentLong(matcher);
+    }
+
+    /**
+     * Matches a not present OptionalDouble.
+     */
+    public static Matcher<OptionalDouble> notPresentDouble() {
         return new TypeSafeMatcher<OptionalDouble>() {
             @Override
             protected boolean matchesSafely(OptionalDouble item) {
@@ -230,17 +304,28 @@ public class OptionalMatchers {
 
             @Override
             public void describeTo(Description description) {
-                description.appendText("An empty OptionalDouble");
+                description.appendText("An OptionalDouble with no value");
             }
         };
     }
 
     /**
-     * Matches a non empty OptionalDouble with the given content
+     * Matches a not present OptionalDouble.
+     *
+     * @deprecated Matcher is replaced with {@link #notPresentDouble()} to
+     *             align with naming of {@link #notPresent()}.
+     */
+    @Deprecated
+    public static Matcher<OptionalDouble> emptyDouble() {
+        return notPresentDouble();
+    }
+
+    /**
+     * Matches a present OptionalDouble with the given content
      *
      * @param content Expected contents of the Optional
      */
-    public static Matcher<OptionalDouble> containsDouble(double content) {
+    public static Matcher<OptionalDouble> presentDouble(double content) {
         return new TypeSafeMatcher<OptionalDouble>() {
             @Override
             protected boolean matchesSafely(OptionalDouble item) {
@@ -255,11 +340,24 @@ public class OptionalMatchers {
     }
 
     /**
-     * Matches a non empty OptionalDouble with content matching the given matcher
+     * Matches a present OptionalDouble with the given content
+     *
+     * @param content Expected contents of the Optional
+     *
+     * @deprecated Matcher is replaced with {@link #presentDouble(double)} to
+     *             align with naming of {@link #present(Object)}.
+     */
+    @Deprecated
+    public static Matcher<OptionalDouble> containsDouble(double content) {
+        return presentDouble(content);
+    }
+
+    /**
+     * Matches a present OptionalDouble with content matching the given matcher
      *
      * @param matcher To match against the OptionalDouble's content
      */
-    public static Matcher<OptionalDouble> containsDouble(Matcher<Double> matcher) {
+    public static Matcher<OptionalDouble> presentDouble(Matcher<Double> matcher) {
         return new TypeSafeMatcher<OptionalDouble>() {
             @Override
             protected boolean matchesSafely(OptionalDouble item) {
@@ -268,8 +366,21 @@ public class OptionalMatchers {
 
             @Override
             public void describeTo(Description description) {
-                description.appendText("OptionalDouble with an item that matches" + matcher);
+                description.appendText("OptionalDouble with an item that matches " + matcher);
             }
         };
+    }
+
+    /**
+     * Matches a present OptionalDouble with content matching the given matcher
+     *
+     * @param matcher To match against the OptionalDouble's content
+     *
+     * @deprecated Matcher is replaced with {@link #presentDouble(Matcher)} to
+     *             align with naming of {@link #present(Matcher)}.
+     */
+    @Deprecated
+    public static Matcher<OptionalDouble> containsDouble(Matcher<Double> matcher) {
+        return presentDouble(matcher);
     }
 }

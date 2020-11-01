@@ -16,8 +16,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.not;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static uk.co.probablyfine.matchers.ApiHelper.describe;
 import static uk.co.probablyfine.matchers.ApiHelper.isDeprecated;
 import static uk.co.probablyfine.matchers.HamcrestApiMatchers.existsInHamcrest;
+import static uk.co.probablyfine.matchers.Java8Matchers.where;
 
 class OptionalMatchersTest {
 
@@ -85,43 +87,43 @@ class OptionalMatchersTest {
     }
 
     @Test
-    void emptyInt_success() {
-        assertThat(OptionalInt.empty(), OptionalMatchers.emptyInt());
+    void notPresentInt_success() {
+        assertThat(OptionalInt.empty(), OptionalMatchers.notPresentInt());
     }
 
     @Test
-    void emptyInt_failure() {
-        assertThat(OptionalInt.of(0), not(OptionalMatchers.emptyInt()));
+    void notPresentInt_failure() {
+        assertThat(OptionalInt.of(0), not(OptionalMatchers.notPresentInt()));
     }
 
     @Test
-    void containsInt_success() {
-        assertThat(OptionalInt.of(0), OptionalMatchers.containsInt(0));
+    void presentInt_success() {
+        assertThat(OptionalInt.of(0), OptionalMatchers.presentInt(0));
     }
 
     @Test
-    void containsInt_failureDiffering() {
-        assertThat(OptionalInt.of(0), not(OptionalMatchers.containsInt(1)));
+    void presentInt_failureDiffering() {
+        assertThat(OptionalInt.of(0), not(OptionalMatchers.presentInt(1)));
     }
 
     @Test
-    void containsInt_failureEmpty() {
-        assertThat(OptionalInt.empty(), not(OptionalMatchers.containsInt(1)));
+    void presentInt_failureEmpty() {
+        assertThat(OptionalInt.empty(), not(OptionalMatchers.presentInt(1)));
     }
 
     @Test
-    void containsIntMatcher_success() {
-        assertThat(OptionalInt.of(0), OptionalMatchers.containsInt(Matchers.equalTo(0)));
+    void presentIntMatcher_success() {
+        assertThat(OptionalInt.of(0), OptionalMatchers.presentInt(Matchers.equalTo(0)));
     }
 
     @Test
-    void containsIntMatcher_failureEmpty() {
-        assertThat(OptionalInt.empty(), not(OptionalMatchers.containsInt(Matchers.equalTo(1))));
+    void presentIntMatcher_failureEmpty() {
+        assertThat(OptionalInt.empty(), not(OptionalMatchers.presentInt(Matchers.equalTo(1))));
     }
 
     @Test
-    void containsIntMatcher_failureDiffering() {
-        assertThat(OptionalInt.of(0), not(OptionalMatchers.containsInt(Matchers.equalTo(1))));
+    void presentIntMatcher_failureDiffering() {
+        assertThat(OptionalInt.of(0), not(OptionalMatchers.presentInt(Matchers.equalTo(1))));
     }
 
     @Test
@@ -130,4 +132,13 @@ class OptionalMatchersTest {
                 .filter(method -> !isDeprecated(method)).sorted(comparing(Method::getName))
                 .map(method -> () -> assertThat(method, not(existsInHamcrest()))));
     }
+
+    @Test
+    void relatedMatchersOfDeprecatedMatchersAreAlsoDeprecated() {
+        ApiInspector streamMatchersApi = new ApiInspector(OptionalMatchers.class, ApiHelper::isMatcherMethod);
+        assertAll(streamMatchersApi.getDeprecated()
+                .flatMap(streamMatchersApi::findRelatedOf).distinct()
+                .map(relatedMethod -> () -> assertThat(describe(relatedMethod) + " should be deprecated", relatedMethod, where(ApiHelper::isDeprecated))));
+    }
+
 }

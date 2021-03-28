@@ -6,7 +6,9 @@
 [![Release Version](https://img.shields.io/maven-central/v/uk.co.probablyfine/java-8-matchers.svg)](https://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22uk.co.probablyfine%22%20AND%20a%3A%22java-8-matchers%22)
 [![Javadocs](https://www.javadoc.io/badge/uk.co.probablyfine/java-8-matchers.svg?color=yellow)](https://www.javadoc.io/doc/uk.co.probablyfine/java-8-matchers)
 
-## :warning: This is a hard fork of [unruly/java-8-matchers](https://github.com/unruly/java-8-matchers) as it is no longer maintained :warning:
+**:bulb: This is a hard fork of [unruly/java-8-matchers](https://github.com/unruly/java-8-matchers), which is no longer maintained :bulb:**
+
+
 
 **Hamcrest Matchers for Java 8 features.**
 

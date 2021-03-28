@@ -44,13 +44,13 @@ Below are some examples of the java-8-matchers API.
 
 ```java
 // Contents of Optional
-assertThat(Optional.of("Hi!"), OptionalMatchers.contains("Hi!"));
+assertThat(Optional.of("Hi!"), OptionalMatchers.present("Hi!"));
 
 // Contents of Optional with Matchers
-assertThat(Optional.of(4), OptionalMatchers.contains(Matchers.greaterThan(3)));
+assertThat(Optional.of(4), OptionalMatchers.present(Matchers.greaterThan(3)));
 
 // Assert empty
-assertThat(Optional.empty(), OptionalMatchers.empty());
+assertThat(Optional.empty(), OptionalMatchers.notPresent());
 ```
 
 

@@ -29,7 +29,7 @@ Available from the Central Repository. In Maven style:
 <dependency>
   <groupId>uk.co.probablyfine</groupId>
   <artifactId>java-8-matchers</artifactId>
-  <version>1.6</version>
+  <version>2.0</version>
 </dependency>
 ```
 

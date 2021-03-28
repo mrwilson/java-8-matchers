@@ -1,7 +1,5 @@
 # java-8-matchers
 
-
-
 [![Build Status](https://travis-ci.org/mrwilson/java-8-matchers.svg?branch=master)](https://travis-ci.org/mrwilson/java-8-matchers)
 [![Release Version](https://img.shields.io/maven-central/v/uk.co.probablyfine/java-8-matchers.svg)](https://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22uk.co.probablyfine%22%20AND%20a%3A%22java-8-matchers%22)
 [![Javadocs](https://www.javadoc.io/badge/uk.co.probablyfine/java-8-matchers.svg?color=yellow)](https://www.javadoc.io/doc/uk.co.probablyfine/java-8-matchers)
@@ -10,7 +8,7 @@
 
 
 
-**Hamcrest Matchers for Java 8 features.**
+## Hamcrest Matchers for Java 8 features.
 
 The library contains matchers for the following types introduced with Java 8:
 
@@ -37,12 +35,12 @@ Available from the Central Repository. In Maven style:
 
 
 
-# Examples
+## Examples
 
 Below are some examples of the java-8-matchers API.
 
 
-## Optionals
+### Optionals
 
 ```java
 // Contents of Optional
@@ -57,7 +55,7 @@ assertThat(Optional.empty(), OptionalMatchers.notPresent());
 
 
 
-## Streams
+### Streams
 
 ```java
 // Stream is empty
@@ -90,7 +88,7 @@ assertThat(Stream.iterate(0, i -> i + 1), StreamMatchers.startsWithAny(Matchers.
 
 
 
-## Time
+### Time
 
 ```java
 // Time is before another
@@ -117,7 +115,7 @@ assertThat(Period.of(1, 2, 3), TimeMatchers.matches(equalTo(1), equalTo(2), equa
 
 
 
-## Method references and lambdas
+### Method references and lambdas
 
 [`Java8Matchers`](https://oss.sonatype.org/service/local/repositories/releases/archive/uk/co/probablyfine/java-8-matchers/1.6/java-8-matchers-1.6-javadoc.jar/!/uk/co/probablyfine/matchers/Java8Matchers.html) enables asserting the state of objects of arbitrary types by using method references or lambdas to resolve values which can be matched by other matchers.
 

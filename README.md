@@ -33,13 +33,6 @@ Available from the Central Repository. In Maven style:
 </dependency>
 ```
 
-A test-jar is also available to gain access to a helper for testing the error messages of failing
-Matchers.
-
-```xml
-<type>test-jar</type>
-```
-
 
 
 # Examples

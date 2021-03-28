@@ -59,13 +59,16 @@ assertThat(Optional.empty(), OptionalMatchers.notPresent());
 
 ```java
 // Stream is empty
-assertThat(Stream.empty(), StreamMatchers.empty());
+assertThat(Stream.empty(), StreamMatchers.yieldsNothing());
 
-// Stream contains elements
-assertThat(Stream.of("a", "b", "c"), StreamMatchers.contains("a", "b", "c"));
+// Stream yields expected elements
+assertThat(Stream.of("a", "b", "c"), StreamMatchers.yieldsExactly("a", "b", "c"));
+
+// Stream yields the same elements as another Stream
+assertThat(Stream.of("bar", "baz"), StreamMatchers.yieldsSameAs(Stream.of("bar", "baz")));
 
 // Stream has only elements matching specified Matcher
-assertThat(Stream.of("bar","baz"), StreamMatchers.allMatch(containsString("a")));
+assertThat(Stream.of("bar", "baz"), StreamMatchers.allMatch(containsString("a")));
 
 // Stream contains at least one element matching specific Matcher
 assertThat(Stream.of("foo", "bar", "baz", "waldo"), StreamMatchers.anyMatch(containsString("ald")));

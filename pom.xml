@@ -79,11 +79,11 @@
                         </rules>
                     </configuration>
                 </plugin>
-                w<plugin>
+                <plugin>
                     <artifactId>maven-dependency-plugin</artifactId>
                     <version>3.2.0</version>
                     <configuration>
-                        <failOnWarning>true</failOnWarning>
+                        <failOnWarning>false</failOnWarning>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -100,7 +100,8 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>3.2.0</version>
+                    <!-- https://issues.apache.org/jira/browse/MJAVADOC-673 -->
+                    <version>3.0.1</version>
                     <configuration>
                         <doclint>all,-missing</doclint>
                         <quiet>true</quiet>
@@ -110,8 +111,10 @@
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>3.0.0-M5</version>
                     <configuration>
-                        <argLine>--add-opens uk.co.probablyfine.matchers/uk.co.probablyfine.matchers=ALL-UNNAMED
-                            --add-opens uk.co.probablyfine.matchers/uk.co.probablyfine.matchers.function=ALL-UNNAMED</argLine>
+                        <argLine>
+                            --add-opens uk.co.probablyfine.matchers/uk.co.probablyfine.matchers=ALL-UNNAMED
+                            --add-opens uk.co.probablyfine.matchers/uk.co.probablyfine.matchers.function=ALL-UNNAMED
+                        </argLine>
                     </configuration>
                 </plugin>
                 <plugin>

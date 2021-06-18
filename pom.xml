@@ -53,6 +53,7 @@
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest</artifactId>
             <version>2.2</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -83,7 +84,7 @@
                     <artifactId>maven-dependency-plugin</artifactId>
                     <version>3.2.0</version>
                     <configuration>
-                        <failOnWarning>false</failOnWarning>
+                        <failOnWarning>true</failOnWarning>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -165,16 +166,6 @@
                     <execution>
                         <goals>
                             <goal>enforce</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>analyze-only</goal>
                         </goals>
                     </execution>
                 </executions>

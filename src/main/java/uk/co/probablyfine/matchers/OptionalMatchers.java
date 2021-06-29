@@ -9,9 +9,6 @@ import java.util.OptionalDouble;
 import java.util.OptionalInt;
 import java.util.OptionalLong;
 
-// https://stackoverflow.com/questions/68013715
-import static org.hamcrest.MatcherAssert.assertThat;
-
 public class OptionalMatchers {
 
     /**

@@ -107,7 +107,7 @@ public final class Java8Matchers {
         };
     }
 
-    // https://stackoverflow.com/questions/68013715
+    // https://issues.apache.org/jira/browse/MDEP-759
     private void customAssert(String reason, boolean assertion) {
         MatcherAssert.assertThat(reason, assertion);
     }

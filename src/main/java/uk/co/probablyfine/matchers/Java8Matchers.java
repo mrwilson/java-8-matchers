@@ -2,6 +2,7 @@ package uk.co.probablyfine.matchers;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
+import org.hamcrest.MatcherAssert;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
 import uk.co.probablyfine.matchers.function.DescribableFunction;
 import uk.co.probablyfine.matchers.function.DescribablePredicate;
@@ -106,6 +107,10 @@ public final class Java8Matchers {
         };
     }
 
+    // https://issues.apache.org/jira/browse/MDEP-759
+    private void customAssert(String reason, boolean assertion) {
+        MatcherAssert.assertThat(reason, assertion);
+    }
 
     private Java8Matchers() {}
 }

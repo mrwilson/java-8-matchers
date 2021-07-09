@@ -4,7 +4,7 @@
 
     <groupId>uk.co.probablyfine</groupId>
     <artifactId>java-8-matchers</artifactId>
-    <version>1.10-SNAPSHOT</version>
+    <version>2.0.0-SNAPSHOT</version>
 
     <name>java-8-matchers</name>
     <description>Hamcrest matchers for features introduced in Java 8: Optional, Stream, the Java Time API, and lambdas.</description>
